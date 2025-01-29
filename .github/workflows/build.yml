@@ -1,0 +1,17 @@
+name: Build & Publish
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Pack
+        run: npm pack
+      # Optionally push the .tgz to GitHub Packages or attach it as an artifact
