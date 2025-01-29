@@ -1,17 +1,33 @@
-name: Build & Publish
+name: Build & Pack
+
 on:
   push:
-    branches:
-      - main
+    branches: [ "master" ]  # or "main" if that's your default branch
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Use Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
         run: npm install
-      - name: Build
+
+      # If your project uses `npm run build` or `gulp build`, do that here:
+      - name: Build project
         run: npm run build
-      - name: Pack
+
+      - name: Pack library
         run: npm pack
-      # Optionally push the .tgz to GitHub Packages or attach it as an artifact
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: powerquery-parser-tarball
+          path: '*.tgz'
